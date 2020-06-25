@@ -1,0 +1,11 @@
+{
+  "name": "serverless-recipients-parcels-management",
+  "version": "1.0.0",
+  "description": "Serverless recipients and parcels management application",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "xssssl",
+  "license": "ISC"
+}
