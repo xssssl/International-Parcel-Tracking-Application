@@ -1,0 +1,82 @@
+[
+    {
+        "userId": "fakeUser1",
+        "recipientId": "12345",
+        "wechatId": "wechatId12345",
+        "wechatNickname": "wechatNickname12345",
+        "fullname": "张三",
+        "mobile": "13914567890",
+        "division": "北京市市区朝阳区",
+        "address": "呼家楼东里2号",
+        "idCode": "110105196903253392",
+        "idFrontFileame": "idFrontFileame123451.jpg",
+        "idBackFilename": "idFrontFileame123452.jpg",
+        "comment": "没有留言",
+        "createdAt": "2020-06-19T10:01:45.424Z",
+        "updatedAt": "2020-06-19T10:01:45.424Z"
+    },
+    {
+        "userId": "fakeUser1",
+        "recipientId": "23456",
+        "wechatId": "wechatId23456",
+        "wechatNickname": "wechatNickname23456",
+        "fullname": "李四",
+        "mobile": "13927894560",
+        "division": "上海市市区静安区",
+        "address": "延安中路1111号",
+        "idCode": "310106198809022128",
+        "idFrontFileame": "idFrontFileame234561.jpg",
+        "idBackFilename": "idFrontFileame234562.jpg",
+        "comment": "尽快发货",
+        "createdAt": "2020-06-20T15:01:45.424Z",
+        "updatedAt": "2020-06-21T22:37:05.424Z"
+    },
+    {
+        "userId": "fakeUser2",
+        "recipientId": "34567",
+        "wechatId": "wechatId34567",
+        "wechatNickname": "wechatNickname34567",
+        "fullname": "王五",
+        "mobile": "13927894560",
+        "division": "上海市市区黄埔区",
+        "address": "人民路839号",
+        "idCode": "310101198411189348",
+        "idFrontFileame": "idFrontFileame345671.jpg",
+        "idBackFilename": "idFrontFileame345672.jpg",
+        "comment": "尽快发货",
+        "createdAt": "2020-06-05T15:01:45.424Z",
+        "updatedAt": "2020-06-05T22:37:05.424Z"
+    },
+    {
+        "userId": "fakeUser3",
+        "recipientId": "45678",
+        "wechatId": "wechatId45678",
+        "wechatNickname": "wechatNickname45678",
+        "fullname": "赵六",
+        "mobile": "13604561357",
+        "division": "上海市市区黄埔区",
+        "address": "西藏中路555号（近南京路）",
+        "idCode": "310101198112156634",
+        "idFrontFileame": "idFrontFileame456781.jpg",
+        "idBackFilename": "idFrontFileame456782.jpg",
+        "comment": "没有留言",
+        "createdAt": "2020-06-08T13:22:09.424Z",
+        "updatedAt": "2020-06-08T13:22:09.424Z",
+        "parcels": [
+            {
+                "parcelId": "008801",
+                "trackingNumber": "ZXW88546951NC",
+                "logisticsId": "aa0001",
+                "createdAt": "2020-06-11T22:42:09.424Z",
+                "updatedAt": "2020-06-11T22:42:09.424Z"
+            },
+            {
+                "parcelId": "008802",
+                "trackingNumber": "ZUR886846951GV",
+                "logisticsId": "aa0002",
+                "createdAt": "2020-06-11T22:42:09.424Z",
+                "updatedAt": "2020-06-11T22:42:09.424Z"
+            }
+        ]
+    }
+]

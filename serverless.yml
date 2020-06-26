@@ -20,40 +20,67 @@ provider:
 
   environment:
     APP_NAME: Serverless-Rcpt-Pcl-Mgr
-    IMAGES_TABLE: Images-${self:provider.stage}
+    RECIPIENTS_TABLE: Recipients-${self:provider.stage}
+    RECIPIENTS_MOBILE_INDEX: RecipientsMobileIndex
+    LOGISTICS_TABLE: Logistics-${self:provider.stage}
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+custom:
+  serverless-offline:
+    httpPort: 3003
 
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: true
+    seed:
+      RecipientsTable:
+        sources:
+          - table: ${self:provider.environment.RECIPIENTS_TABLE}
+            sources: [./test/seed/RecipientsTable.json]
 
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Recipients-Parcels-Management-APIs
+        description: Serverless recipients and parcels management application
 
 functions:
   hello:
     handler: handler.hello
+
+resources:
+  Resources:
+    RecipientsDynamoDBTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: recipientId
+            AttributeType: S
+          - AttributeName: mobile
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: recipientId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.RECIPIENTS_TABLE}
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.RECIPIENTS_MOBILE_INDEX}
+            KeySchema:
+            - AttributeName: mobile
+              KeyType: HASH
+            Projection:
+              ProjectionType: INCLUDE
+              NonKeyAttributes: 
+                - "fullname"
+                - "parcels"
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
