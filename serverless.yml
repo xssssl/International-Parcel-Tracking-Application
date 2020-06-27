@@ -24,6 +24,17 @@ provider:
     RECIPIENTS_MOBILE_INDEX: RecipientsMobileIndex
     LOGISTICS_TABLE: Logistics-${self:provider.stage}
 
+  tracing:
+    lambda: true
+    apiGateway: true
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: "*"
+
 custom:
   serverless-offline:
     httpPort: 3003
@@ -48,8 +59,50 @@ custom:
         description: Serverless recipients and parcels management application
 
 functions:
-  hello:
-    handler: handler.hello
+  GetAllRecipients:
+    handler: src/lambda/http/getAllRecipients.handler
+    events:
+      - http:
+          method: get
+          path: recipients
+          cors: true
+    iamRoleStatementsInherit: true
+    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-GetAllRecipients-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
+
+  CreateRecipient:
+    handler: src/lambda/http/createRecipient.handler
+    events:
+      - http:
+          method: post
+          path: recipients
+          cors: true
+    iamRoleStatementsInherit: true
+    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-CreateRecipient-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
+
+  GetRecipient:
+    handler: src/lambda/http/getRecipient.handler
+    events:
+      - http:
+          method: get
+          path: recipients/id/{recipientId}
+          cors: true
+    iamRoleStatementsInherit: true
+    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-GetRecipient-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
 
 resources:
   Resources:
