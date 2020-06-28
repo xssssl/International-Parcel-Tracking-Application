@@ -8,6 +8,7 @@ import { createLogger } from '../../utils/logger'
 const logger = createLogger('getAllRecipients')
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    console.log(event)
     const userId = 'fakeUser3'
     logger.info(`Get all recipients: User ID: ${userId}`)
     const items = await getAllRecipients(userId)

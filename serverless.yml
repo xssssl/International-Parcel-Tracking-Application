@@ -1,5 +1,5 @@
-service: serverless-recipients-parcels-management
-app: serverless-recipients-parcels-management
+service: International-Parcel-Tracking
+app: Serverless-International-Parcel-Tracking
 # org: your-org-name
 # frameworkVersion: "=X.X.X"
 
@@ -19,7 +19,7 @@ provider:
   region: ${opt:region, 'ap-southeast-1'}
 
   environment:
-    APP_NAME: Serverless-Rcpt-Pcl-Mgr
+    APP_NAME: parcel-tracking-webapp
     RECIPIENTS_TABLE: Recipients-${self:provider.stage}
     RECIPIENTS_MOBILE_INDEX: RecipientsMobileIndex
     LOGISTICS_TABLE: Logistics-${self:provider.stage}
@@ -28,6 +28,7 @@ provider:
     lambda: true
     apiGateway: true
 
+  iamRoleStatementsName: ${self:provider.environment.APP_NAME}-commonIamRole-${self:provider.stage}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -133,6 +134,51 @@ resources:
               NonKeyAttributes: 
                 - "fullname"
                 - "parcels"
+
+    ParcelTrackingCognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: ParcelTracking
+        AutoVerifiedAttributes:
+          - email
+        UsernameAttributes:
+          - email
+        AccountRecoverySetting: 
+          RecoveryMechanisms:
+            - Name: verified_email 
+              Priority: 1
+        Policies: 
+            PasswordPolicy:
+              MinimumLength: 8
+              RequireLowercase: true
+              RequireNumbers: true
+              RequireSymbols: false
+              RequireUppercase: true
+              TemporaryPasswordValidityDays: 1
+
+
+    ParcelTrackingCognitoUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: ParcelTrackingWebApp
+        GenerateSecret: false
+        UserPoolId:
+          Ref: ParcelTrackingCognitoUserPool
+        ExplicitAuthFlows:
+          - ALLOW_CUSTOM_AUTH
+          - ALLOW_USER_SRP_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+
+  Outputs:
+    ParcelTrackingCognitoUserPoolId:
+      Description: Cognito User Pool ID
+      Value:
+        Ref: ParcelTrackingCognitoUserPool
+
+    ParcelTrackingCognitoUserPoolClientId:
+      Description: Cognito User Pool Client ID
+      Value:
+        Ref: ParcelTrackingCognitoUserPoolClient
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
