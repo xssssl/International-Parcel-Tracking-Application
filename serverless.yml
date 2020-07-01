@@ -28,7 +28,7 @@ provider:
     lambda: true
     apiGateway: true
 
-  iamRoleStatementsName: ${self:provider.environment.APP_NAME}-commonIamRole-${self:provider.stage}
+  iamRoleStatementsName: ${self:custom.APP_NAME}-commonIamRole-${self:provider.stage}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -37,6 +37,11 @@ provider:
       Resource: "*"
 
 custom:
+  APP_NAME: parcel-tracking-webapp
+  AUTH_USER_POOL_CLIENT_NAME: ParcelTrackingWebApp
+  AUTH_PREFIX_DOMAIN: parceltracking
+  AUTH_CALLBACK_URL: http://localhost:3000/callback
+
   serverless-offline:
     httpPort: 3003
 
@@ -68,7 +73,7 @@ functions:
           path: recipients
           cors: true
     iamRoleStatementsInherit: true
-    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-GetAllRecipients-${self:provider.stage}
+    iamRoleStatementsName: ${self:custom.APP_NAME}-GetAllRecipients-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -83,7 +88,7 @@ functions:
           path: recipients
           cors: true
     iamRoleStatementsInherit: true
-    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-CreateRecipient-${self:provider.stage}
+    iamRoleStatementsName: ${self:custom.APP_NAME}-CreateRecipient-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -98,7 +103,7 @@ functions:
           path: recipients/id/{recipientId}
           cors: true
     iamRoleStatementsInherit: true
-    iamRoleStatementsName: ${self:provider.environment.APP_NAME}-GetRecipient-${self:provider.stage}
+    iamRoleStatementsName: ${self:custom.APP_NAME}-GetRecipient-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -155,12 +160,16 @@ resources:
               RequireSymbols: false
               RequireUppercase: true
               TemporaryPasswordValidityDays: 1
-
+        Schema:
+          - Name: email
+            AttributeDataType: String
+            Mutable: false
+            Required: true
 
     ParcelTrackingCognitoUserPoolClient:
       Type: AWS::Cognito::UserPoolClient
       Properties:
-        ClientName: ParcelTrackingWebApp
+        ClientName: ${self:custom.AUTH_USER_POOL_CLIENT_NAME}
         GenerateSecret: false
         UserPoolId:
           Ref: ParcelTrackingCognitoUserPool
@@ -168,17 +177,78 @@ resources:
           - ALLOW_CUSTOM_AUTH
           - ALLOW_USER_SRP_AUTH
           - ALLOW_REFRESH_TOKEN_AUTH
+        CallbackURLs:
+          - ${self:custom.AUTH_CALLBACK_URL}
+        AllowedOAuthFlowsUserPoolClient: true
+        AllowedOAuthFlows:
+          - code
+        AllowedOAuthScopes:
+          - openid
+        SupportedIdentityProviders:
+          - COGNITO
+
+    ParcelTrackingCognitoUserPoolDomain:
+      Type: AWS::Cognito::UserPoolDomain
+      Properties: 
+        Domain: ${self:custom.AUTH_PREFIX_DOMAIN}
+        UserPoolId:
+          Ref: ParcelTrackingCognitoUserPool
 
   Outputs:
-    ParcelTrackingCognitoUserPoolId:
+    CognitoUserPoolId:
       Description: Cognito User Pool ID
       Value:
         Ref: ParcelTrackingCognitoUserPool
 
-    ParcelTrackingCognitoUserPoolClientId:
+    CognitoUserPoolClientId:
       Description: Cognito User Pool Client ID
       Value:
         Ref: ParcelTrackingCognitoUserPoolClient
+
+    CognitoUserPoolDomain:
+      Description: Cognito AUTH Domain Name
+      Value:
+        Fn::Join:
+          - ''
+          -
+            - https://
+            - Ref: ParcelTrackingCognitoUserPoolDomain
+            - .auth.
+            - ${self:provider.region}
+            - .amazoncognito.com
+
+    CognitoUserPoolClientHostedUI:
+      Description: Cognito User Pool Client Host UI URL
+      Value:
+        Fn::Join:
+          - ''
+          -
+            - https://
+            - Ref: ParcelTrackingCognitoUserPoolDomain
+            - .auth.
+            - ${self:provider.region}
+            - .amazoncognito.com
+            - /login?
+            - client_id=
+            - Fn::Join:
+              - '&'
+              -
+                - !Ref ParcelTrackingCognitoUserPoolClient
+                - response_type=code
+                - scope=openid
+                - redirect_uri=${self:custom.AUTH_CALLBACK_URL}
+
+
+
+            # - Ref: CognitoUserPoolDomain
+            # - /login?
+            # - client_id=
+            # - end
+            # - !Ref CognitoUserPoolClientId
+            # - &response_type=code
+            # - &scope=openid
+            # - &redirect_uri=
+            # - ${self:custom.AUTH_CALLBACK_URL}
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
