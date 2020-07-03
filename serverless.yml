@@ -18,8 +18,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-1'}
 
+  memorySize: 512
+  timeout: 3
+
   environment:
-    APP_NAME: parcel-tracking-webapp
     RECIPIENTS_TABLE: Recipients-${self:provider.stage}
     RECIPIENTS_MOBILE_INDEX: RecipientsMobileIndex
     LOGISTICS_TABLE: Logistics-${self:provider.stage}
@@ -72,6 +74,12 @@ functions:
           method: get
           path: recipients
           cors: true
+          authorizer:
+            type: cognito_user_pools
+            authorizerId:
+              Ref: ParcelTrackingApiGatewayAuthorizer
+            # scopes:
+            #   - openid
     iamRoleStatementsInherit: true
     iamRoleStatementsName: ${self:custom.APP_NAME}-GetAllRecipients-${self:provider.stage}
     iamRoleStatements:
@@ -184,6 +192,7 @@ resources:
           - code
         AllowedOAuthScopes:
           - openid
+          # - aws.cognito.signin.user.admin
         SupportedIdentityProviders:
           - COGNITO
 
@@ -193,6 +202,17 @@ resources:
         Domain: ${self:custom.AUTH_PREFIX_DOMAIN}
         UserPoolId:
           Ref: ParcelTrackingCognitoUserPool
+
+    ParcelTrackingApiGatewayAuthorizer:
+      Type: AWS::ApiGateway::Authorizer
+      Properties:
+        Name: CognitoUserPoolAuthorizer
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        Type: COGNITO_USER_POOLS
+        ProviderARNs:
+          - Fn::GetAtt: [ ParcelTrackingCognitoUserPool, Arn ]
+        IdentitySource: method.request.header.Authorization
 
   Outputs:
     CognitoUserPoolId:
