@@ -12,6 +12,7 @@ export class RecipientAccess {
         private readonly docClient: DocumentClient = createDynamoDBClient(),
         private readonly recipientsTable = process.env.RECIPIENTS_TABLE
     ) {}
+    
     async getAllRecipients(userId: string): Promise<Recipient[]> {
         logger.info(`Getting all recipients: User ID: ${userId}`)
         const result = await this.docClient.query({

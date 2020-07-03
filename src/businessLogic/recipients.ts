@@ -2,11 +2,12 @@ import * as uuid from 'uuid'
 import { RecipientAccess } from '../dataLayer/recipientAccess'
 import { Recipient } from '../models/recipient'
 import { CreateRecipientRequest } from '../requests/createRecipientRequest'
+import { parseUserId } from '../auth/utils'
 
 const recipientAccess = new RecipientAccess()
 
-export async function getAllRecipients(userId: string): Promise<Recipient[]> {
-    // const userId = parseUserId(jwtToken)
+export async function getAllRecipients(jwtToken: string): Promise<Recipient[]> {
+    const userId = parseUserId(jwtToken)
     return recipientAccess.getAllRecipients(userId)
 }
 
