@@ -10,7 +10,6 @@ const logger = createLogger('getRecipient')
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
-        // const userId = 'fakeUser1'
         const userId = getUserId(event)
         const { recipientId } = event.pathParameters
         logger.info(`Get a recipient: User ID: ${userId}, Recipient ID: ${recipientId}`)

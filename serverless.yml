@@ -73,6 +73,11 @@ custom:
         version: v1.0.0
         title: Recipients-Parcels-Management-APIs
         description: Serverless recipients and parcels management application
+    models:
+      - name: CreateRecipientRequest
+        contentType: application/json
+        description: the request of creating a new recipient
+        schema: ${file(src/requests/createRecipientRequest.json)}
 
 functions:
   GetAllRecipients:
@@ -107,6 +112,10 @@ functions:
             parameters:
               querystrings:
                 userId: true
+          documentation:
+            requestModels:
+              'application/json': CreateRecipientRequest
+          reqValidatorName: RequestBodyValidator
     iamRoleStatementsName: ${self:custom.APP_NAME}-CreateRecipient-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
@@ -232,6 +241,15 @@ resources:
         ProviderARNs:
           - Fn::GetAtt: [ ParcelTrackingCognitoUserPool, Arn ]
         IdentitySource: method.request.header.Authorization
+
+    RequestBodyValidator:
+      Type: AWS::ApiGateway::RequestValidator
+      Properties:
+        Name: Request-Body-Validator
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        ValidateRequestBody: true
+        ValidateRequestParameters: false
 
   Outputs:
     CognitoUserPoolId:

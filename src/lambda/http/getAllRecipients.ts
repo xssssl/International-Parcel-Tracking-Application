@@ -10,8 +10,6 @@ const logger = createLogger('getAllRecipients')
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
-    // console.log(event)
-    // const userId = 'fakeUser3'
     const userId = getUserId(event)
     const jwtToken = getJwtToken(event)
     logger.info(`Get all recipients: User ID: ${userId}`)

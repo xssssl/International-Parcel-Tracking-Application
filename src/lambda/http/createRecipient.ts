@@ -12,10 +12,15 @@ const logger = createLogger('createRecipient')
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
     const { userId } = event.queryStringParameters
-    const newRecipient: CreateRecipientRequest = JSON.parse(event.body)
+    const contentType = event.headers['Content-Type']
     if(!userId) {
       throw new Error('QueryString parameter userId is required')
     }
+    if(contentType !== 'application/json') {
+      throw new Error(`Unsupported content type: ${contentType}`)
+    }
+
+    const newRecipient: CreateRecipientRequest = JSON.parse(event.body)
     logger.info(`Create a recipient: User ID: ${userId}`)
 
     const item = await createRecipient(newRecipient, userId)

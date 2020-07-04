@@ -1,0 +1,56 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "creat a new recipient",
+    "type": "object",
+    "properties": {
+      "wechatId": {
+        "type": "string",
+        "minLength": 6
+      },
+      "wechatNickname": {
+        "type": "string",
+        "minLength": 1
+      },
+      "fullname": {
+        "type": "string",
+        "minLength": 1
+      },
+      "mobile": {
+        "type": "string",
+        "minLength": 11,
+        "maxLength":11
+      },
+      "division": {
+        "type": "string",
+        "minLength": 1
+      },
+      "address": {
+        "type": "string",
+        "minLength": 1
+      },
+      "idCode": {
+        "type": "string",
+        "minLength": 18,
+        "maxLength": 18
+      },
+      "idFrontFilename": {
+        "type": "string"
+      },
+      "idBackFilename": {
+        "type": "string"
+      },
+      "comment": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "wechatId",
+      "wechatNickname",
+      "fullname",
+      "mobile",
+      "division",
+      "address",
+      "idCode"
+    ],
+    "additionalProperties": false
+  }
