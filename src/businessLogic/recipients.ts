@@ -11,8 +11,8 @@ export async function getAllRecipients(jwtToken: string): Promise<Recipient[]> {
     return recipientAccess.getAllRecipients(userId)
 }
 
-export async function getRecipient(userId: string, recipientId: string): Promise<Recipient> {
-    // const userId = parseUserId(jwtToken)
+export async function getRecipient(jwtToken: string, recipientId: string): Promise<Recipient> {
+    const userId = parseUserId(jwtToken)
     return recipientAccess.getRecipient(userId, recipientId)
 }
 
