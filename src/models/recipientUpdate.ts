@@ -1,8 +1,4 @@
-// import { Parcel } from './parcel';
-
-export interface Recipient { 
-    userId: string
-    recipientId: string
+export interface RecipientUpdate { 
     wechatId: string
     wechatNickname: string
     fullname: string
@@ -13,7 +9,5 @@ export interface Recipient {
     idFrontFilename?: string
     idBackFilename?: string
     comment?: string
-    createdAt: string
     updatedAt: string
-    // parcels?: Array<Parcel>
 }

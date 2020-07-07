@@ -146,6 +146,52 @@ functions:
           - dynamodb:GetItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
 
+  UpdateRecipient:
+    handler: src/lambda/http/updateRecipient.handler
+    events:
+      - http:
+          method: patch
+          path: recipients/id/{recipientId}
+          cors: true
+          request:
+            parameters:
+              paths:
+                recipientId: true
+          authorizer:
+            type: cognito_user_pools
+            authorizerId:
+              Ref: ParcelTrackingApiGatewayAuthorizer
+    iamRoleStatementsInherit: true
+    iamRoleStatementsName: ${self:custom.APP_NAME}-UpdateRecipient-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
+
+  DeleteRecipient:
+    handler: src/lambda/http/deleteRecipient.handler
+    events:
+      - http:
+          method: delete
+          path: recipients/id/{recipientId}
+          cors: true
+          request:
+            parameters:
+              paths:
+                recipientId: true
+          authorizer:
+            type: cognito_user_pools
+            authorizerId:
+              Ref: ParcelTrackingApiGatewayAuthorizer
+    iamRoleStatementsInherit: true
+    iamRoleStatementsName: ${self:custom.APP_NAME}-DeleteRecipient-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
+
 resources:
   Resources:
     RecipientsDynamoDBTable:

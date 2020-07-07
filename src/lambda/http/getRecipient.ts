@@ -15,7 +15,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
         logger.info(`Get a recipient: User ID: ${userId}, Recipient ID: ${recipientId}`)
 
         const jwtToken = getJwtToken(event)
-        const result = await getRecipient(jwtToken, recipientId)
+        const result = await getRecipient(recipientId, jwtToken)
         const item = !!result ? result : {}
 
         return {
@@ -35,5 +35,7 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
 })
 
 handler.use(
-    cors()
+    cors({
+        credentials: true
+    })
 )
