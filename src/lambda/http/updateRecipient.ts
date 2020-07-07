@@ -14,6 +14,13 @@ export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGat
         const userId = getUserId(event)
         const jwtToken = getJwtToken(event)
         const { recipientId } = event.pathParameters
+        const contentType = event.headers['Content-Type']
+        if(!recipientId) {
+          throw new Error('Path parameter recipientId is required')
+        }
+        if(contentType !== 'application/json') {
+          throw new Error(`Unsupported content type: ${contentType}`)
+        }
         const updateRecipientRequest: UpdateRecipientRequest = JSON.parse(event.body)
         logger.info(`Update a recipient: User ID: ${userId}, Recipient ID: ${recipientId}`)
 

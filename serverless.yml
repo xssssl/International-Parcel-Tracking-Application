@@ -78,6 +78,10 @@ custom:
         contentType: application/json
         description: the request of creating a new recipient
         schema: ${file(src/requests/createRecipientRequest.json)}
+      - name: UpdateRecipientRequest
+        contentType: application/json
+        description: the request of updating an existed recipient
+        schema: ${file(src/requests/updateRecipientRequest.json)}
 
 functions:
   GetAllRecipients:
@@ -161,6 +165,10 @@ functions:
             type: cognito_user_pools
             authorizerId:
               Ref: ParcelTrackingApiGatewayAuthorizer
+          documentation:
+            requestModels:
+              'application/json': UpdateRecipientRequest
+          reqValidatorName: RequestBodyValidator
     iamRoleStatementsInherit: true
     iamRoleStatementsName: ${self:custom.APP_NAME}-UpdateRecipient-${self:provider.stage}
     iamRoleStatements:
