@@ -2,6 +2,7 @@ import * as uuid from 'uuid'
 import { RecipientAccess } from '../dataLayer/recipientAccess'
 import { Recipient } from '../models/recipient'
 import { RecipientUpdate } from '../models/recipientUpdate'
+import { IdPhotoSignedUrls } from '../models/idPhotoUrls'
 import { CreateRecipientRequest } from '../requests/createRecipientRequest'
 import { UpdateRecipientRequest } from '../requests/updateRecipientRequest'
 import { parseUserId } from '../auth/utils'
@@ -67,4 +68,16 @@ export async function updateRecipient(
 export async function deleteRecipient(recipientId: string, jwtToken: string): Promise<string> {
   const userId = parseUserId(jwtToken)
   return await recipientAccess.deleteRecipient(recipientId, userId)
+}
+
+export async function generateUploadUrl(idFrontFilename: string, idBackFilename: string): Promise<IdPhotoSignedUrls> {
+  const idFrontFilenameExt = idFrontFilename.split('.').slice(-1)
+  const idBackFilenameExt = idBackFilename.split('.').slice(-1)
+  const newIdFrontFilename: string = uuid.v4() + '.' + idFrontFilenameExt
+  const newIdBackFilename: string = uuid.v4() + '.' + idBackFilenameExt
+
+  return {
+          idFront: await recipientAccess.generateUploadUrl(newIdFrontFilename),
+          idBack: await recipientAccess.generateUploadUrl(newIdBackFilename)
+  }
 }

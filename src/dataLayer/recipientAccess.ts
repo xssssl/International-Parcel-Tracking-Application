@@ -1,8 +1,10 @@
 import * as AWS  from 'aws-sdk'
-import * as AWSXRay from 'aws-xray-sdk' 
+import * as AWSXRay from 'aws-xray-sdk'
+import { Types } from 'aws-sdk/clients/s3'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { Recipient } from '../models/recipient'
 import { RecipientUpdate } from '../models/recipientUpdate'
+import { S3SignedUrl } from '../models/idPhotoUrls'
 import { createLogger } from '../utils/logger'
 
 const XAWS = AWSXRay.captureAWS(AWS)
@@ -11,7 +13,10 @@ const logger = createLogger('recipientAccess')
 export class RecipientAccess {
   constructor(
       private readonly docClient: DocumentClient = createDynamoDBClient(),
-      private readonly recipientsTable = process.env.RECIPIENTS_TABLE
+      private readonly recipientsTable = process.env.RECIPIENTS_TABLE,
+      private readonly s3Client: Types = new XAWS.S3({ signatureVersion: 'v4' }),
+      private readonly s3BucketName = process.env.RECIPIENTS_ID_PHOTOS_S3_BUCKET,
+      private readonly signedUrlExpiration = parseInt(process.env.SIGNED_URL_EXPIRATION)
   ) {}
     
   async getAllRecipients(userId: string): Promise<Recipient[]> {
@@ -83,6 +88,19 @@ export class RecipientAccess {
     const result = await this.docClient.delete(params).promise()
     logger.info(`Delete action is completed: Response: ${result}`)
     return recipientId
+  }
+
+  async generateUploadUrl(filename: string): Promise<S3SignedUrl> {
+    logger.info(`Generating image upload URL: Filename: ${filename}`)
+    const url = await this.s3Client.getSignedUrlPromise('putObject', {
+      Bucket: this.s3BucketName,
+      Key: filename,
+      Expires: this.signedUrlExpiration
+    })
+    return {
+      filename,
+      url
+    } as S3SignedUrl
   }
 
   /**

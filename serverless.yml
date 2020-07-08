@@ -33,6 +33,7 @@ provider:
     RECIPIENTS_TABLE: Recipients-${self:provider.stage}
     RECIPIENTS_MOBILE_INDEX: RecipientsMobileIndex
     LOGISTICS_TABLE: Logistics-${self:provider.stage}
+    RECIPIENTS_ID_PHOTOS_S3_BUCKET: recipients-id-photos-${self:provider.stage}
 
   tracing:
     lambda: true
@@ -200,6 +201,38 @@ functions:
           - dynamodb:DeleteItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
 
+  GetSignedUploadUrl:
+    handler: src/lambda/http/getSignedUploadUrl.handler
+    events:
+      - http:
+          method: get
+          path: recipients/id/{recipientId}/signedUploadUrl
+          cors: true
+          request:
+            parameters:
+              paths:
+                recipientId: true
+              querystrings:
+                idFrontFilename: true
+                idBackFilename: true
+          authorizer:
+            type: cognito_user_pools
+            authorizerId:
+              Ref: ParcelTrackingApiGatewayAuthorizer
+    environment:
+      SIGNED_URL_EXPIRATION: 300
+    iamRoleStatementsInherit: true
+    iamRoleStatementsName: ${self:custom.APP_NAME}-GetSignedUploadUrl-${self:provider.stage}
+    iamRoleStatements:
+      # - Effect: Allow
+      #   Action:
+      #     - dynamodb:UpdateItem
+      #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
+      - Effect: Allow
+        Action:
+          - s3:*
+        Resource: arn:aws:s3:::${self:provider.environment.RECIPIENTS_ID_PHOTOS_S3_BUCKET}/*
+
 resources:
   Resources:
     RecipientsDynamoDBTable:
@@ -304,6 +337,24 @@ resources:
           Ref: ApiGatewayRestApi
         ValidateRequestBody: true
         ValidateRequestParameters: false
+
+    RecipientsIdPhotosBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.RECIPIENTS_ID_PHOTOS_S3_BUCKET}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
 
   Outputs:
     CognitoUserPoolId:
