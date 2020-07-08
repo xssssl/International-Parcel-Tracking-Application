@@ -103,6 +103,19 @@ export class RecipientAccess {
     } as S3SignedUrl
   }
 
+  async generateDownloadUrl(filename: string): Promise<S3SignedUrl> {
+    logger.info(`Generating image download URL: Filename: ${filename}`)
+    const url = await this.s3Client.getSignedUrlPromise('getObject', {
+      Bucket: this.s3BucketName,
+      Key: filename,
+      Expires: this.signedUrlExpiration
+    })
+    return {
+      filename,
+      url
+    } as S3SignedUrl
+  }
+
   /**
    * Generate UpdateExpression, ExpressionAttributeNames and ExpressionAttributeValues
    * for updating an item in DynamoDB table

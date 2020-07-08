@@ -201,12 +201,12 @@ functions:
           - dynamodb:DeleteItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
 
-  GetSignedUploadUrl:
-    handler: src/lambda/http/getSignedUploadUrl.handler
+  GetSignedUploadUrls:
+    handler: src/lambda/http/getSignedUploadUrls.handler
     events:
       - http:
           method: get
-          path: recipients/id/{recipientId}/signedUploadUrl
+          path: recipients/id/{recipientId}/signedUploadUrls
           cors: true
           request:
             parameters:
@@ -222,12 +222,41 @@ functions:
     environment:
       SIGNED_URL_EXPIRATION: 300
     iamRoleStatementsInherit: true
-    iamRoleStatementsName: ${self:custom.APP_NAME}-GetSignedUploadUrl-${self:provider.stage}
+    iamRoleStatementsName: ${self:custom.APP_NAME}-GetSignedUploadUrls-${self:provider.stage}
     iamRoleStatements:
       # - Effect: Allow
       #   Action:
       #     - dynamodb:UpdateItem
       #   Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
+      - Effect: Allow
+        Action:
+          - s3:*
+        Resource: arn:aws:s3:::${self:provider.environment.RECIPIENTS_ID_PHOTOS_S3_BUCKET}/*
+
+  GetSignedDownloadUrls:
+    handler: src/lambda/http/getSignedDownloadUrls.handler
+    events:
+      - http:
+          method: get
+          path: recipients/id/{recipientId}/signedDownloadUrls
+          cors: true
+          request:
+            parameters:
+              paths:
+                recipientId: true
+          authorizer:
+            type: cognito_user_pools
+            authorizerId:
+              Ref: ParcelTrackingApiGatewayAuthorizer
+    environment:
+      SIGNED_URL_EXPIRATION: 300
+    iamRoleStatementsInherit: true
+    iamRoleStatementsName: ${self:custom.APP_NAME}-GetSignedDownloadUrls-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
       - Effect: Allow
         Action:
           - s3:*

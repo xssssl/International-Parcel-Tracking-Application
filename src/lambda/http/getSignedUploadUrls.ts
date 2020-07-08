@@ -1,12 +1,12 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { generateUploadUrl } from '../../businessLogic/recipients'
+import { generateUploadUrls } from '../../businessLogic/recipients'
 import { getUserId } from '../utils'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 import { createLogger } from '../../utils/logger'
 
-const logger = createLogger('getUploadUrl')
+const logger = createLogger('getSignedUploadUrls')
 
 export const handler = middy(
     async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
@@ -16,7 +16,7 @@ export const handler = middy(
             const { idFrontFilename, idBackFilename } = event.queryStringParameters
             logger.info(`Generate ID photo upload Urls: User ID: ${userId}, Recipient ID: ${recipientId}`)
 
-            const uploadUrls = await generateUploadUrl(idFrontFilename, idBackFilename)
+            const uploadUrls = await generateUploadUrls(idFrontFilename, idBackFilename)
             return {
                 statusCode: 200,
                 body: JSON.stringify({

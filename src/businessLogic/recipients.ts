@@ -70,7 +70,7 @@ export async function deleteRecipient(recipientId: string, jwtToken: string): Pr
   return await recipientAccess.deleteRecipient(recipientId, userId)
 }
 
-export async function generateUploadUrl(idFrontFilename: string, idBackFilename: string): Promise<IdPhotoSignedUrls> {
+export async function generateUploadUrls(idFrontFilename: string, idBackFilename: string): Promise<IdPhotoSignedUrls> {
   const idFrontFilenameExt = idFrontFilename.split('.').slice(-1)
   const idBackFilenameExt = idBackFilename.split('.').slice(-1)
   const newIdFrontFilename: string = uuid.v4() + '.' + idFrontFilenameExt
@@ -79,5 +79,12 @@ export async function generateUploadUrl(idFrontFilename: string, idBackFilename:
   return {
           idFront: await recipientAccess.generateUploadUrl(newIdFrontFilename),
           idBack: await recipientAccess.generateUploadUrl(newIdBackFilename)
+  }
+}
+
+export async function generateDownloadUrls(idFrontFilename: string, idBackFilename: string): Promise<IdPhotoSignedUrls> {
+  return {
+          idFront: await recipientAccess.generateDownloadUrl(idFrontFilename),
+          idBack: await recipientAccess.generateDownloadUrl(idBackFilename)
   }
 }
