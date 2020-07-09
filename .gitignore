@@ -13,3 +13,6 @@ env_*
 
 # webpack
 .webpack
+
+# report
+report.*

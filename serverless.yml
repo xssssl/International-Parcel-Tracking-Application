@@ -10,6 +10,7 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-dynamodb-local
   - serverless-offline
+  - serverless-plugin-tracing
 
 package:
   individually: true
@@ -151,6 +152,25 @@ functions:
           - dynamodb:GetItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}
 
+  GetAllRecipientsByMobile:
+    handler: src/lambda/http/getAllRecipientsByMobile.handler
+    events:
+      - http:
+          method: get
+          path: recipients/mobile/{mobile}
+          cors: true
+          request:
+            parameters:
+              paths:
+                mobile: true
+    iamRoleStatementsInherit: true
+    iamRoleStatementsName: ${self:custom.APP_NAME}-GetAllRecipientsByMobile-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.RECIPIENTS_TABLE}/index/${self:provider.environment.RECIPIENTS_MOBILE_INDEX}
+
   UpdateRecipient:
     handler: src/lambda/http/updateRecipient.handler
     events:
@@ -287,10 +307,14 @@ resources:
             - AttributeName: mobile
               KeyType: HASH
             Projection:
+              # ProjectionType: ALL
               ProjectionType: INCLUDE
               NonKeyAttributes: 
                 - "fullname"
-                - "parcels"
+            #     # - "parcels"
+            # ProvisionedThroughput:
+            #     ReadCapacityUnits: 3
+            #     WriteCapacityUnits: 3
 
     ParcelTrackingCognitoUserPool:
       Type: AWS::Cognito::UserPool

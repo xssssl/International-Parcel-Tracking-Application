@@ -1,6 +1,7 @@
 import * as uuid from 'uuid'
 import { RecipientAccess } from '../dataLayer/recipientAccess'
 import { Recipient } from '../models/recipient'
+import { RecipientGetByMobile } from '../models/recipientGetByMobile'
 import { RecipientUpdate } from '../models/recipientUpdate'
 import { IdPhotoSignedUrls } from '../models/idPhotoUrls'
 import { CreateRecipientRequest } from '../requests/createRecipientRequest'
@@ -17,6 +18,10 @@ export async function getAllRecipients(jwtToken: string): Promise<Recipient[]> {
 export async function getRecipient(recipientId: string, jwtToken: string): Promise<Recipient> {
   const userId = parseUserId(jwtToken)
   return recipientAccess.getRecipient(userId, recipientId)
+}
+
+export async function getAllRecipientsByMobile(mobile: string): Promise<RecipientGetByMobile[]> {
+  return recipientAccess.getAllRecipientsByMobile(mobile)
 }
 
 export async function createRecipient(createRecipientRequest: CreateRecipientRequest, 

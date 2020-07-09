@@ -4,6 +4,7 @@ import { Types } from 'aws-sdk/clients/s3'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { Recipient } from '../models/recipient'
 import { RecipientUpdate } from '../models/recipientUpdate'
+import { RecipientGetByMobile } from '../models/recipientGetByMobile'
 import { S3SignedUrl } from '../models/idPhotoUrls'
 import { createLogger } from '../utils/logger'
 
@@ -14,24 +15,41 @@ export class RecipientAccess {
   constructor(
       private readonly docClient: DocumentClient = createDynamoDBClient(),
       private readonly recipientsTable = process.env.RECIPIENTS_TABLE,
+      private readonly recipientsTableMobileIndex = process.env.RECIPIENTS_MOBILE_INDEX,
       private readonly s3Client: Types = new XAWS.S3({ signatureVersion: 'v4' }),
       private readonly s3BucketName = process.env.RECIPIENTS_ID_PHOTOS_S3_BUCKET,
       private readonly signedUrlExpiration = parseInt(process.env.SIGNED_URL_EXPIRATION)
   ) {}
     
   async getAllRecipients(userId: string): Promise<Recipient[]> {
-      logger.info(`Getting all recipients: User ID: ${userId}`)
-      const result = await this.docClient.query({
-        TableName: this.recipientsTable,
-        KeyConditionExpression: 'userId = :userId',
-        ExpressionAttributeValues: {
-          ':userId': userId
-        },
-        ScanIndexForward: false
-      }).promise()
-      const items = result.Items
-      return items as Recipient[]
-    }
+    logger.info(`Getting all recipients: User ID: ${userId}`)
+    const result = await this.docClient.query({
+      TableName: this.recipientsTable,
+      KeyConditionExpression: 'userId = :userId',
+      ExpressionAttributeValues: {
+        ':userId': userId
+      },
+      ScanIndexForward: false
+    }).promise()
+    const items = result.Items
+    return items as Recipient[]
+  }
+
+
+  async getAllRecipientsByMobile(mobile: string): Promise<RecipientGetByMobile[]> {
+    logger.info(`Getting a recipient: Mobile: ${mobile}`)
+    const result = await this.docClient.query({
+      TableName: this.recipientsTable,
+      IndexName: this.recipientsTableMobileIndex,
+      KeyConditionExpression: 'mobile = :mobile',
+      ExpressionAttributeValues: {
+        ':mobile': mobile
+      },
+      ScanIndexForward: false
+    }).promise()
+    const items = result.Items
+    return items as RecipientGetByMobile[]
+  }
 
   async getRecipient(userId: string, recipientId: string): Promise<Recipient> {
     logger.info(`Getting a recipient: User ID: ${userId}, Recipient ID: ${recipientId}`)
