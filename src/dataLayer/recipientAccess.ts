@@ -18,6 +18,7 @@ export class RecipientAccess {
       private readonly recipientsTableMobileIndex = process.env.RECIPIENTS_MOBILE_INDEX,
       private readonly s3Client: Types = new XAWS.S3({ signatureVersion: 'v4' }),
       private readonly s3BucketName = process.env.RECIPIENTS_ID_PHOTOS_S3_BUCKET,
+      private readonly s3WatermarkBucketName = process.env.RECIPIENTS_ID_PHOTOS_WATERMARK_S3_BUCKET,
       private readonly signedUrlExpiration = parseInt(process.env.SIGNED_URL_EXPIRATION)
   ) {}
     
@@ -124,7 +125,7 @@ export class RecipientAccess {
   async generateDownloadUrl(filename: string): Promise<S3SignedUrl> {
     logger.info(`Generating image download URL: Filename: ${filename}`)
     const url = await this.s3Client.getSignedUrlPromise('getObject', {
-      Bucket: this.s3BucketName,
+      Bucket: this.s3WatermarkBucketName,
       Key: filename,
       Expires: this.signedUrlExpiration
     })
