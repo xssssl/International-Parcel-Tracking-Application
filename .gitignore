@@ -16,3 +16,6 @@ env_*
 
 # report
 report.*
+
+# typescript
+lib
