@@ -1,0 +1,1010 @@
+{
+	"info": {
+		"_postman_id": "d09642d2-e309-413d-8857-5e03856d137b",
+		"name": "Serverless International Parcel Tracking Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Offline",
+			"item": [
+				{
+					"name": "Get All Recipients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/dev/recipients",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"dev",
+								"recipients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Recipient",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/dev/recipients/id/234567",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"dev",
+								"recipients",
+								"id",
+								"234567"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Recipient",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"wechatId\": \"testId\",\r\n    \"wechatNickname\": \"testNickname\",\r\n    \"fullname\": \"testFullname\",\r\n    \"mobile\": \"13707778889\",\r\n    \"division\": \"上海市城区嘉定区\",\r\n    \"address\": \"菊园新城嘉唐公路66号\",\r\n    \"idCode\": \"310114198802195026\",\r\n    \"idFrontFileame\": \"testFrontFilename.jpg\",\r\n    \"idBackFilename\": \"testBackFilename.jpg\",\r\n    \"comment\": \"非常感谢\"\r\n}"
+						},
+						"url": {
+							"raw": "{{localhost}}/dev/recipients",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"dev",
+								"recipients"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Deployed",
+			"item": [
+				{
+					"name": "/recipients",
+					"item": [
+						{
+							"name": "Create a Recipient | Valid | With all valid keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a0299bf9-6e70-4889-a619-75983be5bf64",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([201,202]);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Return the newly created item\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.item.userId).to.exist;\r",
+											"    pm.expect(jsonData.item.recipientId).to.exist;\r",
+											"    pm.expect(jsonData.item.fullname).to.exist;\r",
+											"    pm.expect(jsonData.item.mobile).to.exist;\r",
+											"    pm.expect(jsonData.item.division).to.exist;\r",
+											"    pm.expect(jsonData.item.address).to.exist;\r",
+											"    pm.expect(jsonData.item.idCode).to.exist;\r",
+											"    pm.expect(jsonData.item.idFrontFilename).to.exist;\r",
+											"    pm.expect(jsonData.item.idBackFilename).to.exist;\r",
+											"    pm.expect(jsonData.item.createdAt).to.exist;\r",
+											"    pm.expect(jsonData.item.updatedAt).to.exist;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "6d14733a-5c70-4e27-83ef-87856793e05c",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"wechatId\": \"testId\",\r\n    \"wechatNickname\": \"testNickname\",\r\n    \"fullname\": \"testFullname\",\r\n    \"mobile\": \"13707778889\",\r\n    \"division\": \"上海市城区嘉定区\",\r\n    \"address\": \"菊园新城嘉唐公路66号\",\r\n    \"idCode\": \"310114198802195026\",\r\n    \"idFrontFilename\": \"testFrontFilename.jpg\",\r\n    \"idBackFilename\": \"testBackFilename.jpg\",\r\n    \"comment\": \"非常感谢\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients?userId=42652d70-5a4b-4c34-a2c8-dfdb3de022d0",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "42652d70-5a4b-4c34-a2c8-dfdb3de022d0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Recipient | Valid | Missing optional keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "403e7418-b4bb-4f11-a3c5-a20f28270394",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([201,202]);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Return the newly created item\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.item.userId).to.exist;\r",
+											"    pm.expect(jsonData.item.recipientId).to.exist;\r",
+											"    pm.expect(jsonData.item.fullname).to.exist;\r",
+											"    pm.expect(jsonData.item.mobile).to.exist;\r",
+											"    pm.expect(jsonData.item.division).to.exist;\r",
+											"    pm.expect(jsonData.item.address).to.exist;\r",
+											"    pm.expect(jsonData.item.idCode).to.exist;\r",
+											"    pm.expect(jsonData.item.idFrontFilename).to.exist;\r",
+											"    pm.expect(jsonData.item.idBackFilename).to.exist;\r",
+											"    pm.expect(jsonData.item.createdAt).to.exist;\r",
+											"    pm.expect(jsonData.item.updatedAt).to.exist;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "88ef100b-cb64-44b0-a7ec-9df50875e1c2",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"wechatId\": \"testId\",\r\n    \"wechatNickname\": \"testNickname\",\r\n    \"fullname\": \"testFullname\",\r\n    \"mobile\": \"13707778889\",\r\n    \"division\": \"上海市城区嘉定区\",\r\n    \"address\": \"菊园新城嘉唐公路66号\",\r\n    \"idCode\": \"310114198802195026\",\r\n    \"idFrontFilename\": \"testFrontFilename.jpg\",\r\n    \"idBackFilename\": \"testBackFilename.jpg\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients?userId=75bbd03c-17f4-446b-b85e-8d59f4c3c0b0",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "75bbd03c-17f4-446b-b85e-8d59f4c3c0b0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Recipient | Invalid request querystring",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "6cfbc6f9-dbe9-4204-8ead-de743cf785d0",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"wechatId\": \"testId\",\r\n    \"wechatNickname\": \"testNickname\",\r\n    \"fullname\": \"testFullname\",\r\n    \"mobile\": \"13707778889\",\r\n    \"division\": \"上海市城区嘉定区\",\r\n    \"address\": \"菊园新城嘉唐公路66号\",\r\n    \"idCode\": \"310114198802195026\",\r\n    \"idFrontFilename\": \"testFrontFilename.jpg\",\r\n    \"idBackFilename\": \"testBackFilename.jpg\",\r\n    \"comment\": \"非常感谢\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Recipient | Invalid request body | Invalid keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "50b1c1ad-4b39-4249-9703-15c2329b779b",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"wechatId\": \"testId\",\r\n    \"wechatNickname\": \"testNickname\",\r\n    \"fullname\": \"testFullname\",\r\n    \"mobile\": \"13707778889\",\r\n    \"division\": \"上海市城区嘉定区\",\r\n    \"address\": \"菊园新城嘉唐公路66号\",\r\n    \"idCode\": \"310114198802195026\",\r\n    \"idFrontFilename\": \"testFrontFilename.jpg\",\r\n    \"idBackFilename\": \"testBackFilename.jpg\",\r\n    \"comment\": \"非常感谢\",\r\n    \"unexpectedKey\": \"virus\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients?userId=75bbd03c-17f4-446b-b85e-8d59f4c3c0b0",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "75bbd03c-17f4-446b-b85e-8d59f4c3c0b0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Recipient | Invalid request body | Missing required key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "33121e26-f0e2-4e7a-978e-c173adf61db4",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"wechatId\": \"testId\",\r\n    \"wechatNickname\": \"testNickname\",\r\n    \"mobile\": \"13707778889\",\r\n    \"division\": \"上海市城区嘉定区\",\r\n    \"address\": \"菊园新城嘉唐公路66号\",\r\n    \"idCode\": \"310114198802195026\",\r\n    \"idFrontFilename\": \"testFrontFilename.jpg\",\r\n    \"idBackFilename\": \"testBackFilename.jpg\",\r\n    \"comment\": \"非常感谢\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients?userId=75bbd03c-17f4-446b-b85e-8d59f4c3c0b0",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "75bbd03c-17f4-446b-b85e-8d59f4c3c0b0"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Recipients",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "dfb5dcda-796a-4575-a41d-38d015b41f0a",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Recipients by mobile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "1b3de692-b529-4397-ae00-b145c609a838",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{authToken}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients/mobile/13707778889",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients",
+										"mobile",
+										"13707778889"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a Recipient by recipientId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3a55c70b-053c-4fd7-995e-9245a4d3538b",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Return the newly created item\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.item.userId).to.exist;\r",
+											"    pm.expect(jsonData.item.recipientId).to.exist;\r",
+											"    pm.expect(jsonData.item.fullname).to.exist;\r",
+											"    pm.expect(jsonData.item.mobile).to.exist;\r",
+											"    pm.expect(jsonData.item.division).to.exist;\r",
+											"    pm.expect(jsonData.item.address).to.exist;\r",
+											"    pm.expect(jsonData.item.idCode).to.exist;\r",
+											"    pm.expect(jsonData.item.createdAt).to.exist;\r",
+											"    pm.expect(jsonData.item.updatedAt).to.exist;\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients/id/f2c93597-3461-4042-8cbb-0cda069284e9",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients",
+										"id",
+										"f2c93597-3461-4042-8cbb-0cda069284e9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get ID Photo Pre-Signed Upload Urls",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b03de255-5667-441f-9a0c-c58e830bc237",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Return two signed upload Urls\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.idFront).to.exist;\r",
+											"    pm.expect(jsonData.idBack).to.exist;\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients/id/f2c93597-3461-4042-8cbb-0cda069284e9/signedUploadUrls?idFrontFilename=idFront.png&idBackFilename=idPhotoBack.jpg",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients",
+										"id",
+										"f2c93597-3461-4042-8cbb-0cda069284e9",
+										"signedUploadUrls"
+									],
+									"query": [
+										{
+											"key": "idFrontFilename",
+											"value": "idFront.png"
+										},
+										{
+											"key": "idBackFilename",
+											"value": "idPhotoBack.jpg"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get ID Photo Pre-Signed Download Urls",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "64db2dfb-3dda-4ae0-9548-ba86426e58be",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Return two signed upload Urls\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.idFront).to.exist;\r",
+											"    pm.expect(jsonData.idBack).to.exist;\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients/id/f2c93597-3461-4042-8cbb-0cda069284e9/signedDownloadUrls",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients",
+										"id",
+										"f2c93597-3461-4042-8cbb-0cda069284e9",
+										"signedDownloadUrls"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Recipient by recipientId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "8a2aa487-9985-44e7-ba7a-701ba52cd8f6",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response body has the deleted recipient Id\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.deletedRecipientId).to.be.an('String');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients/id/6ae84f0b-3bee-47a3-96e9-6ed7088f97a1",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients",
+										"id",
+										"6ae84f0b-3bee-47a3-96e9-6ed7088f97a1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update a Recipient by recipientId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d62a47f5-0851-474a-974d-c0b4c349b060",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"wechatId\": \"testId123\",\r\n    \"wechatNickname\": \"testNickname\",\r\n    \"fullname\": \"testFullname123\",\r\n    \"mobile\": \"13707778889\",\r\n    \"division\": \"上海市城区嘉定区\",\r\n    \"address\": \"菊园新城嘉唐公路66号\",\r\n    \"idCode\": \"310114198802195026\",\r\n    \"comment\": \"非常感谢123\",\r\n    \"idFrontFilename\": \"cfece122-eb70-4dd1-94c8-0c65e12aed4b.png\",\r\n    \"idBackFilename\": \"bf472e68-d816-4ae2-a655-3303ccd69e3f.jpg\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients/id/f2c93597-3461-4042-8cbb-0cda069284e9",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients",
+										"id",
+										"f2c93597-3461-4042-8cbb-0cda069284e9"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update a Recipient by recipientId | Invalid request body | Missing required key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "106a5f44-27ed-4446-88f2-61c26dbfb07d",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"wechatId\": \"testId135\",\r\n    \"fullname\": \"testFullname135\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients/id/025c86c6-f2b2-4802-a743-9c06902cd2ea",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients",
+										"id",
+										"025c86c6-f2b2-4802-a743-9c06902cd2ea"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update a Recipient by recipientId | Invalid request body | Invalid keys",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "8cfd0a31-85ec-4f4b-bcae-e863d9f59f8b",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{authToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"wechatId\": \"testId123\",\r\n    \"wechatNickname\": \"testNickname\",\r\n    \"fullname\": \"testFullname123\",\r\n    \"mobile\": \"13707778889\",\r\n    \"division\": \"上海市城区嘉定区\",\r\n    \"address\": \"菊园新城嘉唐公路66号\",\r\n    \"idCode\": \"310114198802195026\",\r\n    \"unexpectedKey\": \"virus\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{endpointApi}}/dev/recipients/id/025c86c6-f2b2-4802-a743-9c06902cd2ea",
+									"host": [
+										"{{endpointApi}}"
+									],
+									"path": [
+										"dev",
+										"recipients",
+										"id",
+										"025c86c6-f2b2-4802-a743-9c06902cd2ea"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "/parcels",
+					"item": [],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "/logistics",
+					"item": [],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "/oauth2/token (Request Token)",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate, br"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "en-US,en;q=0.9"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "grant_type",
+											"value": "authorization_code",
+											"description": "Grant type. Must be authorization_code or refresh_token or client_credentials. Required.",
+											"type": "text"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://localhost:3000/callback",
+											"description": "Must be the same redirect_uri that was used to get authorization_code in /oauth2/authorize. Required only if grant_type is authorization_code.",
+											"type": "text"
+										},
+										{
+											"key": "client_id",
+											"value": "4pqg5u410areo04d369s5pd1n",
+											"description": "Client ID. Must be a preregistered client in the user pool. The client must be enabled for Amazon Cognito federation. Required if the client is public and does not have a secret.",
+											"type": "text"
+										},
+										{
+											"key": "code",
+											"value": "93d393ab-c47c-4f7f-a0c9-e0852f437346",
+											"description": "Get using the /login endpoint (see redirect URL). Required if grant_type is authorization_code.",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{CognitoDomain}}/oauth2/token",
+									"host": [
+										"{{CognitoDomain}}"
+									],
+									"path": [
+										"oauth2",
+										"token"
+									]
+								},
+								"description": "After Sign-in with the authentication code.\r\nRequest a JWT from Cognito using authentication code"
+							},
+							"response": []
+						},
+						{
+							"name": "/oauth2/authorize(Request Authentication Code)",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept-Encoding",
+										"value": "gzip, deflate, br"
+									},
+									{
+										"key": "Accept-Language",
+										"value": "en-US,en;q=0.9"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": []
+								},
+								"url": {
+									"raw": "{{CognitoDomain}}/oauth2/authorize?client_id=6ikcro99bk822r5de5k1ttq9en&response_type=code&scope=openid&redirect_uri=http://localhost:3000/callback",
+									"host": [
+										"{{CognitoDomain}}"
+									],
+									"path": [
+										"oauth2",
+										"authorize"
+									],
+									"query": [
+										{
+											"key": "client_id",
+											"value": "6ikcro99bk822r5de5k1ttq9en"
+										},
+										{
+											"key": "response_type",
+											"value": "code"
+										},
+										{
+											"key": "scope",
+											"value": "openid"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://localhost:3000/callback"
+										}
+									]
+								},
+								"description": "Redirect to the login page to request an authentication code."
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "f3d6753e-e707-42b3-b8b5-9f359ed5d7ca",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "8ecbe1cc-5e34-4e6b-aa4c-4a31c6c99d67",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "9d428e8b-8c1f-4639-819a-12de9755e2e1",
+			"key": "localhost",
+			"value": ""
+		},
+		{
+			"id": "e3236145-e1ac-4b47-b99b-a5d35e9b0da4",
+			"key": "endpointApi",
+			"value": ""
+		},
+		{
+			"id": "859cc190-6b64-4c2e-a513-0dd7fb2a7892",
+			"key": "CognitoDomain",
+			"value": ""
+		},
+		{
+			"id": "910909f9-5c1f-4992-931b-1dd123849afd",
+			"key": "authToken",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
