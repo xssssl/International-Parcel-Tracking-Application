@@ -41,6 +41,7 @@ It is a self-service application that allow customers to upload their delivery i
 All APIs and schemas are designed and documented on Swagger following OpenAPI 3. The detailed specifications could be see [here](https://app.swaggerhub.com/apis-docs/xssl/Recipients-n-Parcels-Management/0.1.0).
 
 ### APIs
+
 Restful API design principals are applied. There are four endpoints. 
 * `/recipients`
 * `/users`
@@ -50,6 +51,7 @@ Restful API design principals are applied. There are four endpoints.
 Each endpoint has CRUD methods.
 
 ### Schemas
+
 Each endpoint has its own schemas(model). List recipient schema here to demonstrate. Each recipient item contains the following fields:
 * `userId` (string) - a unique id for a user which is parsed from [AWS Cognito JWT](https://docs.aws.amazon.com/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html)
 * `recipientId` (string) - a unique id for a recipient
@@ -69,7 +71,8 @@ Each endpoint has its own schemas(model). List recipient schema here to demonstr
 
 # Deployment
 
-  CI/CD pipeline would be implemented if Travis CI is well configured. Or deploy the application manually.
+
+  CI/CD pipeline would be implemented automatically if Travis CI is well configured. Or deploy the application manually.
   
 ```
   
@@ -78,8 +81,6 @@ npm install
 sls deploy -v
 
 ```
-
-  
 
 # Test
 
