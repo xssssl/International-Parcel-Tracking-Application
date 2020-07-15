@@ -4,3 +4,18 @@ jspm_packages
 
 # Serverless directories
 .serverless
+
+# Dynamodb Local
+.dynamodb
+
+# Environment Variables
+env_*
+
+# webpack
+.webpack
+
+# report
+report.*
+
+# typescript
+lib
