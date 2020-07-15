@@ -1,6 +1,9 @@
 
 # International Parcel Tracking Application (Backend)
-[![Serverless Badge](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)  
+
+[![Serverless Framework Badge](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
+[![Travis CI Badge](https://travis-ci.com/xssssl/International-Parcel-Tracking-Application.svg?branch=master)](https://www.travis-ci.org/)
+
 
 The application is a **Serverless Application** that entirely build on cloud (AWS).
 
