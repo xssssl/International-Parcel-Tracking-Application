@@ -1,7 +1,6 @@
 
 # International Parcel Tracking Application (Backend)
 [![Serverless Badge](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)  
-[![Swagger Badge](https://validator.swagger.io/validator?url=https://api.swaggerhub.com/apis/xssl/Recipients-n-Parcels-Management/0.1.0)](https://app.swaggerhub.com/apis-docs/xssl/Recipients-n-Parcels-Management/0.1.0)
 
 The application is a **Serverless Application** that entirely build on cloud (AWS).
 
@@ -28,13 +27,14 @@ It is a self-service application that allow customers to upload their delivery i
 * CI/CD
   * [Travis CI](https://www.travis-ci.org/)
 
-![Stack.png](https://github.com/xssssl/International-Parcel-Tracking-Application/blob/dev/media/Stack.png "Stack.png")
+![Stack.png](https://github.com/xssssl/International-Parcel-Tracking-Application/blob/dev/media/Stack.PNG)
 
 # Infrastructure Architecture
-![Architecture.png](https://github.com/xssssl/International-Parcel-Tracking-Application/blob/dev/media/Architecture.png "Architecture.png")
+![Architecture.png](https://github.com/xssssl/International-Parcel-Tracking-Application/blob/dev/media/Architecture.PNG)
 
 
 # Specification
+[![Swagger Badge](https://validator.swagger.io/validator?url=https://api.swaggerhub.com/apis/xssl/Recipients-n-Parcels-Management/0.1.0)](https://app.swaggerhub.com/apis-docs/xssl/Recipients-n-Parcels-Management/0.1.0)
 All APIs and schemas are designed and documented on Swagger following OpenAPI 3. The detailed specifications could be see [here](https://app.swaggerhub.com/apis-docs/xssl/Recipients-n-Parcels-Management/0.1.0).
 
 ### APIs
