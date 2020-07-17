@@ -30,11 +30,11 @@ It is a self-service application that allow customers to upload their delivery i
 * CI/CD
   * [Travis CI](https://www.travis-ci.org/)
 
-![Stack.png](https://github.com/xssssl/International-Parcel-Tracking-Application/blob/dev/media/Stack.PNG)
+![Stack.png](https://github.com/xssssl/International-Parcel-Tracking-Application/blob/master/media/Stack.PNG)
 
 # Infrastructure Architecture
 
-![Architecture.png](https://github.com/xssssl/International-Parcel-Tracking-Application/blob/dev/media/Architecture.PNG)
+![Architecture.png](https://github.com/xssssl/International-Parcel-Tracking-Application/blob/master/media/Architecture.PNG)
 
 
 # Specification
@@ -87,4 +87,4 @@ sls deploy -v
 
 # Test
 
-All the APIs are tested through postman. More information of postman collection could see [here](https://github.com/xssssl/International-Parcel-Tracking-Application/blob/dev/test/postman/Serverless%20International%20Parcel%20Tracking%20Application.postman_collection.json).
+All the APIs are tested through postman. More information of postman collection could see [here](https://github.com/xssssl/International-Parcel-Tracking-Application/blob/master/test/postman/Serverless%20International%20Parcel%20Tracking%20Application.postman_collection.json).
