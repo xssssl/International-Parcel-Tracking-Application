@@ -15,6 +15,7 @@
     "aws-sdk": "^2.713.0",
     "aws-xray-sdk": "^3.1.0",
     "file-loader": "^6.0.0",
+    "happypack": "^5.0.1",
     "hard-source-webpack-plugin": "^0.13.1",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-dynamodb-local": "^0.2.37",
