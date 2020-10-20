@@ -25,7 +25,7 @@ provider:
       fullExecutionData: true
   
   stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'ap-southeast-1'}
+  region: ${opt:region, 'ap-southeast-2'}
 
   memorySize: 512
   timeout: 3
@@ -34,8 +34,8 @@ provider:
     RECIPIENTS_TABLE: Recipients-${self:provider.stage}
     RECIPIENTS_MOBILE_INDEX: RecipientsMobileIndex
     LOGISTICS_TABLE: Logistics-${self:provider.stage}
-    RECIPIENTS_ID_PHOTOS_S3_BUCKET: recipients-id-photos-${self:provider.stage}
-    RECIPIENTS_ID_PHOTOS_WATERMARK_S3_BUCKET: recipients-id-photos-watermark-${self:provider.stage}
+    RECIPIENTS_ID_PHOTOS_S3_BUCKET: parcel-recipients-id-photos-${self:provider.stage}
+    RECIPIENTS_ID_PHOTOS_WATERMARK_S3_BUCKET: parcel-recipients-id-photos-watermark-${self:provider.stage}
 
   tracing:
     lambda: true

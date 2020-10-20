@@ -1,9 +1,14 @@
 const path = require('path');
 const slsw = require('serverless-webpack');
 // var nodeExternals = require('webpack-node-externals')
+// const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+// var HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+
+// const smp = new SpeedMeasurePlugin();
 
 module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
+  // mode: 'production',
   entry: slsw.lib.entries,
   // externals: [nodeExternals()],
   devtool: 'source-map',
@@ -33,4 +38,7 @@ module.exports = {
       },
     ],
   },
+  // plugins: [
+  //   new HardSourceWebpackPlugin()
+  // ]
 };

@@ -9,7 +9,7 @@ The application is a **Serverless Application** that entirely build on cloud (AW
 
 This application is an attempt to automate the daily repetitive tasks of [Daigou Shoppers](https://en.wikipedia.org/wiki/Daigou).
 
-It is a self-service application that allow customers to upload their delivery information and tracking their pacels. Customer's delivery information would only be seen by their shopping representatives (Daigou). Customers could track their parcels by recipient's mobile. Don't need to care which forwarding agent it is and don't need to copy/paste the hard-to-remember tracking number any more.
+It is a self-service application that allow customers to upload their delivery information and tracking their parcels. Customer's delivery information would only be seen by their shopping representatives (Daigou). Customers could track their parcels by recipient's mobile. Don't need to care which forwarding agent it is and don't need to copy/paste the hard-to-remember tracking number any more.
 
 # Stack
 

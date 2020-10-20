@@ -10,4 +10,5 @@ install:
 before_script:
   - export NODE_OPTIONS=--max_old_space_size=8192
 script: 
-  - sls deploy -v
+  # - sls deploy -v
+  - sls package
