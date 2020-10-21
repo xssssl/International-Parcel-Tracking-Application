@@ -71,7 +71,6 @@ module.exports = {
   plugins: [
   //   new HardSourceWebpackPlugin()
     new HappyPack({
-      threads: $THREAD_NUMBER && 1,
       threads: Math.max(1, (os.cpus().length)),
       // threads: (os.cpus().length > 4) ? 3 : os.cpus().length,
       // threads: 4,
