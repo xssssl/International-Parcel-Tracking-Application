@@ -10,7 +10,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 // const smp = new SpeedMeasurePlugin();
 
 console.log('Mode: ', slsw.lib.webpack.isLocal ? 'development' : 'production')
-console.log('CPUs: ', os.cpus().length)
+console.log('CPUs: ', os.cpus())
 
 module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
@@ -71,7 +71,7 @@ module.exports = {
   plugins: [
   //   new HardSourceWebpackPlugin()
     new HappyPack({
-      threads: Math.max(1, (os.cpus().length)),
+      threads: Math.max(1, (os.cpus().length - 1)),
       // threads: (os.cpus().length > 4) ? 3 : os.cpus().length,
       // threads: 4,
       use: [
