@@ -11,7 +11,6 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 console.log('Mode: ', slsw.lib.webpack.isLocal ? 'development' : 'production')
 console.log('CPUs: ', os.cpus().length)
-console.log('Thread Number: ', $THREAD_NUMBER)
 
 module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
@@ -73,7 +72,7 @@ module.exports = {
   //   new HardSourceWebpackPlugin()
     new HappyPack({
       threads: $THREAD_NUMBER && 1,
-      // threads: Math.max(1, (os.cpus().length - 1)),
+      threads: Math.max(1, (os.cpus().length)),
       // threads: (os.cpus().length > 4) ? 3 : os.cpus().length,
       // threads: 4,
       use: [
