@@ -56,6 +56,9 @@ custom:
   AUTH_CALLBACK_URL: http://localhost:3000/callback
   ID_PHOTOS_UPLOADED_TOPIC: idPhotoUploaded-${self:provider.stage}
 
+  webpack:
+    includeModules: false   # exclude node_modules folder
+
   serverless-offline:
     httpPort: 3003
 

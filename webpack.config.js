@@ -3,14 +3,17 @@ const slsw = require('serverless-webpack');
 const os = require('os')
 // var nodeExternals = require('webpack-node-externals')
 // const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
-// var HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+var HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const HappyPack = require('happypack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 // const smp = new SpeedMeasurePlugin();
 
-console.log('Mode: ', slsw.lib.webpack.isLocal ? 'development' : 'production')
 console.log('CPUs: ', os.cpus())
+const threadNumber = !!~os.cpus()[0].model.indexOf('i7-4700HQ')
+                      ? (os.cpus().length) / 2 - 1
+                      : Math.max(1, (os.cpus().length - 1))
 
 module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
@@ -35,9 +38,9 @@ module.exports = {
       //   exclude: /node_modules/, 
       //   use: {
       //     loader: 'ts-loader',
-      //     options: {
-      //       transpileOnly: true
-      //     }
+      //     // options: {
+      //     //   transpileOnly: true
+      //     // }
       //   } 
       // },
       { 
@@ -69,11 +72,12 @@ module.exports = {
     ],
   },
   plugins: [
-  //   new HardSourceWebpackPlugin()
+    new HardSourceWebpackPlugin(),
     new HappyPack({
-      threads: Math.max(1, (os.cpus().length - 1)),
+      // threads: Math.max(1, (os.cpus().length - 1)),
       // threads: (os.cpus().length > 4) ? 3 : os.cpus().length,
       // threads: 4,
+      threads: threadNumber,
       use: [
         {
           path: 'ts-loader',
@@ -90,6 +94,16 @@ module.exports = {
           syntactic: true
         }
       }
-    })
-  ]
+    }),
+  ],
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        cache: true,
+  //       // parallel: true,
+        sourceMap: true, // Must be set to true if using source-maps in production
+      }),
+    ],
+  }
 };
