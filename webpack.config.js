@@ -72,7 +72,7 @@ module.exports = {
     ],
   },
   plugins: [
-    new HardSourceWebpackPlugin(),
+    // new HardSourceWebpackPlugin(),
     new HappyPack({
       // threads: Math.max(1, (os.cpus().length - 1)),
       // threads: (os.cpus().length > 4) ? 3 : os.cpus().length,
