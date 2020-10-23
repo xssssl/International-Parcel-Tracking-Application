@@ -7,13 +7,14 @@ var HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const HappyPack = require('happypack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 // const smp = new SpeedMeasurePlugin();
 
 console.log('CPUs: ', os.cpus())
 const threadNumber = !!~os.cpus()[0].model.indexOf('i7-4700HQ')
                       ? (os.cpus().length) / 2 - 1
-                      : Math.max(1, (os.cpus().length - 1))
+                      : Math.max(2, (os.cpus().length - 1))
 
 module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
@@ -97,13 +98,25 @@ module.exports = {
     }),
   ],
   optimization: {
-    minimize: false,
+    minimize: true,    // When packaging on Travis CI, it would crash if set to true
     minimizer: [
       new TerserPlugin({
-        // cache: true,
+        cache: true,
   //       // parallel: true,
-        // sourceMap: true, // Must be set to true if using source-maps in production
+        sourceMap: true, // Must be set to true if using source-maps in production
+
       }),
+      // new UglifyJsPlugin({
+      //   cache: true,
+      //   parallel: true,
+      //   uglifyOptions: {
+      //     // compress: false,
+      //     compress: true,
+      //     ecma: 6,
+      //     mangle: true
+      //   },
+      //   sourceMap: true
+      // })
     ],
   }
 };
