@@ -7,14 +7,13 @@ var HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const HappyPack = require('happypack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 // const smp = new SpeedMeasurePlugin();
 
 console.log('CPUs: ', os.cpus())
 const threadNumber = !!~os.cpus()[0].model.indexOf('i7-4700HQ')
                       ? (os.cpus().length) / 2 - 1
-                      : Math.max(2, (os.cpus().length - 1))
+                      : Math.max(1, (os.cpus().length - 1))
 
 module.exports = {
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
@@ -33,7 +32,6 @@ module.exports = {
   module: {
     rules: [
       // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
-      // { test: /\.tsx?$/, loader: 'ts-loader' },
       // { 
       //   test: /\.tsx?$/, 
       //   exclude: /node_modules/, 
@@ -49,15 +47,8 @@ module.exports = {
         exclude: /node_modules/, 
         use: {
           loader: 'happypack/loader'
-          // loader: 'ts-loader',
-          // options: {
-          //   // transpileOnly: true,
-          //   happyPackMode: true
-          // }
         }
       },
-      
-      // { test: /\.tsx?$/, use: 'happypack/loader' },
       { 
         test: /\.(png|jpg|bmp|gif|svg)$/, 
         exclude: /node_modules/, 
@@ -75,9 +66,6 @@ module.exports = {
   plugins: [
     new HardSourceWebpackPlugin(),
     new HappyPack({
-      // threads: Math.max(1, (os.cpus().length - 1)),
-      // threads: (os.cpus().length > 4) ? 3 : os.cpus().length,
-      // threads: 4,
       threads: threadNumber,
       use: [
         {
@@ -98,7 +86,7 @@ module.exports = {
     }),
   ],
   optimization: {
-    minimize: true,    // When packaging on Travis CI, it would crash if set to true
+    minimize: false,    // When packaging on Travis CI, it would crash if set to true
     minimizer: [
       new TerserPlugin({
         cache: true,
@@ -106,17 +94,6 @@ module.exports = {
         sourceMap: true, // Must be set to true if using source-maps in production
 
       }),
-      // new UglifyJsPlugin({
-      //   cache: true,
-      //   parallel: true,
-      //   uglifyOptions: {
-      //     // compress: false,
-      //     compress: true,
-      //     ecma: 6,
-      //     mangle: true
-      //   },
-      //   sourceMap: true
-      // })
     ],
   }
 };
